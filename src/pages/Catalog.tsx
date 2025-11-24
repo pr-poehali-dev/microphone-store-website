@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 const Catalog = () => {
   const [priceRange, setPriceRange] = useState([0, 50000]);
   const [selectedType, setSelectedType] = useState<string>('all');
+  const [selectedPattern, setSelectedPattern] = useState<string>('all');
   const [cartItems, setCartItems] = useState<number[]>([]);
 
   const products = [
@@ -17,6 +18,7 @@ const Catalog = () => {
       id: 1,
       name: 'Studio Pro X1',
       type: 'condenser',
+      pattern: 'cardioid',
       price: 29990,
       rating: 4.9,
       reviews: 156,
@@ -28,6 +30,7 @@ const Catalog = () => {
       id: 2,
       name: 'Classic Voice',
       type: 'dynamic',
+      pattern: 'supercardioid',
       price: 8990,
       rating: 4.7,
       reviews: 243,
@@ -39,6 +42,7 @@ const Catalog = () => {
       id: 3,
       name: 'Podcast USB',
       type: 'usb',
+      pattern: 'cardioid',
       price: 4990,
       rating: 4.5,
       reviews: 512,
@@ -50,6 +54,7 @@ const Catalog = () => {
       id: 4,
       name: 'Broadcast Master',
       type: 'condenser',
+      pattern: 'multipattern',
       price: 45990,
       rating: 5.0,
       reviews: 89,
@@ -61,6 +66,7 @@ const Catalog = () => {
       id: 5,
       name: 'Stream Lite',
       type: 'usb',
+      pattern: 'omnidirectional',
       price: 2990,
       rating: 4.3,
       reviews: 678,
@@ -72,6 +78,7 @@ const Catalog = () => {
       id: 6,
       name: 'Stage Dynamic Pro',
       type: 'dynamic',
+      pattern: 'hypercardioid',
       price: 12990,
       rating: 4.8,
       reviews: 334,
@@ -88,11 +95,21 @@ const Catalog = () => {
     { value: 'usb', label: 'USB' },
   ];
 
+  const patterns = [
+    { value: 'all', label: 'Все', icon: 'Circle' },
+    { value: 'cardioid', label: 'Кардиоида', icon: 'Heart' },
+    { value: 'supercardioid', label: 'Суперкардиоида', icon: 'Droplet' },
+    { value: 'hypercardioid', label: 'Гиперкардиоида', icon: 'Zap' },
+    { value: 'omnidirectional', label: 'Круговая', icon: 'CircleDot' },
+    { value: 'multipattern', label: 'Мультипаттерн', icon: 'Grid3x3' },
+  ];
+
   const filteredProducts = products.filter(
     (p) =>
       p.price >= priceRange[0] &&
       p.price <= priceRange[1] &&
-      (selectedType === 'all' || p.type === selectedType)
+      (selectedType === 'all' || p.type === selectedType) &&
+      (selectedPattern === 'all' || p.pattern === selectedPattern)
   );
 
   const addToCart = (productId: number, productName: string) => {
@@ -132,6 +149,23 @@ const Catalog = () => {
                             onClick={() => setSelectedType(type.value)}
                           >
                             {type.label}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium mb-3 block">Диаграмма направленности</label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {patterns.map((pattern) => (
+                          <Button
+                            key={pattern.value}
+                            variant={selectedPattern === pattern.value ? 'default' : 'outline'}
+                            className="w-full justify-start hover-scale text-xs px-2"
+                            onClick={() => setSelectedPattern(pattern.value)}
+                          >
+                            <Icon name={pattern.icon as any} size={14} className="mr-1.5 flex-shrink-0" />
+                            <span className="truncate">{pattern.label}</span>
                           </Button>
                         ))}
                       </div>
